@@ -1,4 +1,7 @@
 import { useState, useEffect } from 'react'
+import Login from "./components/Login";
+import SignUp from "./components/SignUp";
+
 
 const STATUS = {
   applied: { label: "Applied", color: "#5B7FBD", bg: "#EAF0FA" },
@@ -22,6 +25,8 @@ function App(){
   const [notes, setNotes] = useState('')
   const [editingId, setEditingId] = useState(null)
   const [filter, setFilter]=useState('all')
+  const [screen, setScreen] = useState('login')
+
 
 function addApplications() {
   if (editingId === null) {
@@ -58,8 +63,14 @@ const visibleApplications = applications.filter(app => filter === 'all' || app.s
   useEffect(() => { const savedApplications = localStorage.getItem("application"); if (savedApplications) { setApplications(JSON.parse(savedApplications)); } }, []);
 
   return(
+    <div>
+    {screen === 'login' && <Login goToSignup={() => setScreen('signup')} goToApp={() => setScreen('tracker')} />}
+{screen === 'signup' && <SignUp goToLogin={() => setScreen('login')} goToApp={() => setScreen('tracker')} />}
+
+{screen === 'tracker' && (
      <div className="min-h-screen bg-[#FAF8F5] py-8 px-4">
     <div className="max-w-2xl mx-auto">
+    
     <h1  className="text-4xl font-bold text-[#1C2541] tracking-tight">
       Job Application Tracker
     </h1>
@@ -156,6 +167,8 @@ const visibleApplications = applications.filter(app => filter === 'all' || app.s
      </div>
     </div>
     </div>
+    )}
+  </div>
   )
 }
 export default App
